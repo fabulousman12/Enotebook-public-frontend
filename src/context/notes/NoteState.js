@@ -15,6 +15,7 @@ const NoteState = (props) => {
     const token = localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true);
+      getNote(token);
       getuser(token);
       getimg(); // Fetch user data if authenticated
     }
@@ -93,22 +94,50 @@ const NoteState = (props) => {
     setName(json.name);
   };
   // get the img
-  const getimg = async()=>{
+  const getimg = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${host}/api/img/files`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Auth': token
-        }
-      });
-      const json = await response.json();
-      setImages(json);
-      
-    };
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Auth': token
+      }
+    });
+    const json = await response.json();
+ 
+    setImages(json);
+  };
+
+  // Delete an image
+  const deleteimg = async (imgid) => {
+    const token = localStorage.getItem('token');
+    await fetch(`${host}/api/img/delete/${imgid}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Auth': token
+      }
+    });
+    setImages(images.filter(img => img._id !== imgid));
+  };
+
+  // Add an 
+  const Imgadd = async (formData) => {
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(`${host}/api/img/upload`, {
+      method: 'POST',
+      headers: {
+        'Auth': token,
+      },
+      body: formData
+    });
+    const json = await response.json();
+    setImages((prevImages) => [...prevImages, json]);
+  };
 
   return (
-    <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNote, isAuthenticated, getuser, name,setIsAuthenticated,host,categories,getimg,chosecat, setchosecat,images }}>
+    <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNote, isAuthenticated, getuser, name,setIsAuthenticated,host,categories,getimg,chosecat, setchosecat,images,deleteimg,Imgadd }}>
       {props.children}
     </NoteContext.Provider>
   );

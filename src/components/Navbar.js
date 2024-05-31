@@ -56,7 +56,7 @@ if (dropdown) {
             
 
              {categories.map((category, index) => (
-                    <li key={index} ref={dropdownRef} > 
+                    <li key={index} > 
                         <Link to="/notesimg" ref={dropdownRef} className={`nav-link ${location.pathname===category?"active":""}`}style={{color:"black"}} onClick={()=>handle(category)}>{category}</Link>
                         
                     </li>
@@ -65,8 +65,12 @@ if (dropdown) {
           </ul>
         </li>
         <li className="nav-item">
+          <Link className={`nav-link ${location.pathname==="/MyNotes"?"active":""}`}  to="/MyNotes">MyNotes</Link>
+        </li> 
+        <li className="nav-item">
           <Link className={`nav-link ${location.pathname==="/about"?"active":""}`}  to="/about">About</Link>
         </li> 
+
         
      
       </ul>
